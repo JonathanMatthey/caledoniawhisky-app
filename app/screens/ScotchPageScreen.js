@@ -2,10 +2,12 @@
 
 var React = require('react-native');
 var WhiskyActions = require('../actions/WhiskyActions');
+var WhiskyStore = require('../stores/WhiskyStore');
 
 var {
   ScrollView,
   StyleSheet,
+  ListView,
   Text,
   TextInput,
   View,
@@ -24,9 +26,52 @@ var ScotchPageScreen = React.createClass({
     WhiskyActions.getWhisky(whiskyId)
   },
 
+  getInitialState: function() {
+    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    return {
+      reviewsDataSource: ds.cloneWithRows(this._genReviewRows({})),
+    };
+  },
+
+  _renderReviewRow: function(rowData: string, sectionID: number, rowID: number) {
+    return (
+      <View>
+        <Text >
+          {rowData + ' - '}
+        </Text>
+      </View>
+    );
+  },
+
+  _genReviewRows: function(pressData: {[key: number]: boolean}): Array<string> {
+    var dataBlob = [];
+    for (var ii = 0; ii < 100; ii++) {
+      var pressedText = pressData[ii] ? ' (pressed)' : '';
+      dataBlob.push('Row ' + ii + pressedText);
+    }
+    return dataBlob;
+  },
+
+  _pressRow: function(rowID: number) {
+    this._pressData[rowID] = !this._pressData[rowID];
+  },
+
   componentDidMount() {
     var self = this;
     self.getWhisky(this.props.scotch._id);
+    WhiskyStore.addChangeListener(this.updateWhiskyFromStore);
+  },
+
+  componentWillUnmount() {
+    WhiskyStore.removeChangeListener(this.updateWhiskyFromStore);
+  },
+
+  updateWhiskyFromStore: function(){
+    console.log('WhiskyStore.getWhisky()');
+    console.log(WhiskyStore.getWhisky());
+    this.setState({
+      reviewsDataSource: this.state.reviewsDataSource.cloneWithRows(this._genReviewRows(this._pressData))
+    });
   },
 
   render: function() {
@@ -35,7 +80,7 @@ var ScotchPageScreen = React.createClass({
     return (
       <ScrollView style={styles.container}>
         <Image
-          source={{uri: "http://localhost:8080/dev/reactnative/scotchapp/img/whisky/" + this.props.scotch.images.thumbnail_filename}}
+          source={{uri: "http://localhost:8080/dev/reactnative/caledoniawhisky/img/whisky/" + this.props.scotch.images.thumbnail_filename}}
           style={styles.mainImage}
         />
         <View style={styles.details}>
@@ -47,41 +92,41 @@ var ScotchPageScreen = React.createClass({
             <Image
               style={styles.ratingStar}
               capInsets= {{top: 1, left: 1, bottom: 1, right: 1}}
-              source={{ uri: 'http://localhost:8080/dev/reactnative/scotchapp/img/icons/icon-star-' + (randomRating>=1 ?'gold':'grey') + '.png'}}
+              source={{ uri: 'http://localhost:8080/dev/reactnative/caledoniawhisky/img/icons/icon-star-' + (randomRating>=1 ?'gold':'grey') + '.png'}}
             />
             <Image
               style={styles.ratingStar}
               capInsets= {{top: 1, left: 1, bottom: 1, right: 1}}
-              source={{ uri: 'http://localhost:8080/dev/reactnative/scotchapp/img/icons/icon-star-' + (randomRating>=2 ?'gold':'grey') + '.png'}}
+              source={{ uri: 'http://localhost:8080/dev/reactnative/caledoniawhisky/img/icons/icon-star-' + (randomRating>=2 ?'gold':'grey') + '.png'}}
             />
             <Image
               style={styles.ratingStar}
               capInsets= {{top: 1, left: 1, bottom: 1, right: 1}}
-              source={{ uri: 'http://localhost:8080/dev/reactnative/scotchapp/img/icons/icon-star-' + (randomRating>=3 ?'gold':'grey') + '.png'}}
+              source={{ uri: 'http://localhost:8080/dev/reactnative/caledoniawhisky/img/icons/icon-star-' + (randomRating>=3 ?'gold':'grey') + '.png'}}
             />
             <Image
               style={styles.ratingStar}
               capInsets= {{top: 1, left: 1, bottom: 1, right: 1}}
-              source={{ uri: 'http://localhost:8080/dev/reactnative/scotchapp/img/icons/icon-star-' + (randomRating>=4 ?'gold':'grey') + '.png'}}
+              source={{ uri: 'http://localhost:8080/dev/reactnative/caledoniawhisky/img/icons/icon-star-' + (randomRating>=4 ?'gold':'grey') + '.png'}}
             />
             <Image
               style={styles.ratingStar}
               capInsets= {{top: 1, left: 1, bottom: 1, right: 1}}
-              source={{ uri: 'http://localhost:8080/dev/reactnative/scotchapp/img/icons/icon-star-' + (randomRating>=5 ?'gold':'grey') + '.png'}}
+              source={{ uri: 'http://localhost:8080/dev/reactnative/caledoniawhisky/img/icons/icon-star-' + (randomRating>=5 ?'gold':'grey') + '.png'}}
             />
           </View>
 
           <Text style={styles.description}>{this.props.scotch.description}</Text>
 
+          <View>
             <View>
-              <View>
-                <Text style={styles.textInputLabel}>MY REVIEW</Text>
-              </View>
-              <TextInput
-                autoCapitalize="sentences"
-                style={styles.reviewTextInput}
-              />
+              <Text style={styles.textInputLabel}>MY REVIEW</Text>
             </View>
+            <TextInput
+              autoCapitalize="sentences"
+              style={styles.reviewTextInput}
+            />
+          </View>
 
           <TouchableHighlight
             style={[styles.btn, styles.btnWriteNote]}
@@ -139,14 +184,12 @@ var styles = StyleSheet.create({
     lineHeight: 24,
   },
   btn:{
-    lineHeight: 30,
     borderWidth: 2,
     borderRadius: 20,
     overflow: 'hidden',
     paddingTop: 10,
     paddingBottom: 10,
     alignItems: 'center',
-    textAlign: "center",
     justifyContent: 'center',
     position:"relative",
     width:330,

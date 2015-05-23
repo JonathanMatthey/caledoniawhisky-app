@@ -8,7 +8,7 @@
  */
 
 #import "AppDelegate.h"
-
+#import "FBSDKCoreKit/FBSDKCoreKit.h"
 #import "RCTRootView.h"
 
 @implementation AppDelegate
@@ -31,7 +31,7 @@
   // OPTION 2
   // Load from pre-bundled file on disk. To re-generate the static bundle, run
   //
-  // $ curl 'http://localhost:8081/index.ios.bundle?dev=false&minify=true' -o iOS/main.jsbundle
+  // $ curl http://localhost:8081/index.ios.bundle -o main.jsbundle
   //
   // and uncomment the next following line
   // jsCodeLocation = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
@@ -40,12 +40,29 @@
                                                       moduleName:@"caledoniawhisky"
                                                    launchOptions:launchOptions];
 
-  self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-  UIViewController *rootViewController = [[UIViewController alloc] init];
-  rootViewController.view = rootView;
-  self.window.rootViewController = rootViewController;
-  [self.window makeKeyAndVisible];
-  return YES;
+    self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    UIViewController *rootViewController = [[UIViewController alloc] init];
+    rootViewController.view = rootView;
+    self.window.rootViewController = rootViewController;
+
+    [self.window makeKeyAndVisible];
+    return [[FBSDKApplicationDelegate sharedInstance] application:application
+                                    didFinishLaunchingWithOptions:launchOptions];
 }
+
+- (void)applicationDidBecomeActive:(UIApplication *)application {
+    [FBSDKAppEvents activateApp];
+}
+
+- (BOOL)application:(UIApplication *)application
+            openURL:(NSURL *)url
+  sourceApplication:(NSString *)sourceApplication
+         annotation:(id)annotation {
+    return [[FBSDKApplicationDelegate sharedInstance] application:application
+                                                          openURL:url
+                                                sourceApplication:sourceApplication
+                                                       annotation:annotation];
+}
+
 
 @end

@@ -7,7 +7,6 @@ var {
   Text,
   View,
   Image,
-  TextInput,
   TabBarIOS,
   NavigatorIOS,
   TouchableHighlight
@@ -58,7 +57,7 @@ var MainScreen = React.createClass({
         <TabBarItemIOS
           accessibilityLabel="Caledonia"
           name="caledoniaTab"
-          icon={_ix_DEPRECATED('swords@2x.png')}
+          icon={_ix_DEPRECATED('swords.png')}
           title="Caledonia"
           badgeValue={ null}
           selected={this.state.selectedTab === 'caledoniaTab'}
@@ -71,7 +70,7 @@ var MainScreen = React.createClass({
         </TabBarItemIOS>
         <TabBarItemIOS
           name="whiskiesTab"
-          icon={_ix_DEPRECATED('dram2@2x.png')}
+          icon={_ix_DEPRECATED('dram2.png')}
           accessibilityLabel="Whisky"
           title="Whisky"
           selected={this.state.selectedTab === 'whiskiesTab'}
@@ -97,7 +96,7 @@ var MainScreen = React.createClass({
         <TabBarItemIOS
           accessibilityLabel="Profile"
           name="Profile"
-          icon={_ix_DEPRECATED('swords@2x.png')}
+          icon={_ix_DEPRECATED('swords.png')}
           title="MyNotes"
           badgeValue={ null}
           selected={this.state.selectedTab === 'profileTab'}

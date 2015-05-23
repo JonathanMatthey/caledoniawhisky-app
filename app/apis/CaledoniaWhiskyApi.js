@@ -22,40 +22,23 @@ module.exports = {
         'Content-Type': 'application/json'
       },
       body: '{"email": "' + userId + '", "password": "' + password + '"}'
-    }).then(handleResponse(key, params))
+    }).then(handleResponse(key, params));
   },
 
   getWhisky(whiskyId){
-    var url = baseApiUrl + '/api/whiskies/' + whiskyId;
-    // var key = WhiskyConstants.USERSESSION_CREATE;
+    var url = baseApiUrl + 'api/whiskies/' + whiskyId;
+    var key = ApiConstants.RECEIVE_WHISKY;
     var params = {};
 
-    // dispatch(key, ApiConstants.PENDING, params)
+    dispatch(key, ApiConstants.PENDING, params)
 
-    // fetch(url,{
-    //   method: 'post',
-    //   headers: {
-    //     'Accept': 'application/json',
-    //     'Content-Type': 'application/json'
-    //   },
-    //   body: ''
-    // }).then(
-    // console.log(res))
-    // fetch(REQUEST_URL,{
-    //     method: 'get',
-    //     headers: {
-    //       'Accept': 'application/json',
-    //       'Content-Type': 'application/json'
-    //     }
-    //   })
-    //   .then((response) => response.json())
-    //   .then((responseData) => {
-    //     this.setState({
-    //       dataSource: this.state.dataSource.cloneWithRows(responseData.movies),
-    //       loaded: true,
-    //     });
-    //   })
-    //   .done();
+    fetch(url,{
+      method: 'get',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    }).then(handleResponse(key, params));
   }
 
 }

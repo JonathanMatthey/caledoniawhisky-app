@@ -14,7 +14,6 @@ var {
 } = React;
 
 var ScotchPageScreen = require('./ScotchPageScreen');
-var fetch = require('fetch');
 
 var API_URL = 'http://localhost:3000/api/whiskies';
 var PAGE_SIZE = 25;
@@ -25,11 +24,13 @@ var whiskiesByRegion = {};
 
 function generateWhiskiesByRegion(whiskies){
   var whiskiesData = {};
-  for (var i in whiskies){
-    if (whiskiesData.hasOwnProperty(whiskies[i].region)) {
-      whiskiesData[whiskies[i].region].push(whiskies[i]);
-    } else {
-      whiskiesData[whiskies[i].region] = [whiskies[i]];
+  for (var i = 0; i < whiskies.length; i++){
+    if(whiskies[i]){
+      if (whiskiesData.hasOwnProperty(whiskies[i].region)) {
+        whiskiesData[whiskies[i].region].push(whiskies[i]);
+      } else {
+        whiskiesData[whiskies[i].region] = [whiskies[i]];
+      }
     }
   }
   return whiskiesData;
@@ -46,13 +47,14 @@ function makeRenderable(example: any): ReactClass<any, any, any> {
     example;
 }
 
-class ScothListComponent extends React.Component {
+class ScotchListComponent extends React.Component {
 
   _fetchData(){
+    console.log('request_url',REQUEST_URL);
     fetch(REQUEST_URL)
       .then((response) => response.json())
       .catch((error) => {
-        console.log('ScothListComponent: fetch error');
+        console.log('ScotchListComponent: fetch error');
         this.setState({
           dataSource: ds.cloneWithRowsAndSections({}),
           isLoading: false,
@@ -167,7 +169,7 @@ class ScothListComponent extends React.Component {
         <TouchableHighlight onPress={() => this._onPressRow(scotch)}>
           <View style={styles.row}>
             <Image
-              source={{uri: "http://localhost:8080/dev/reactnative/scotchapp/img/whisky/" + scotch.images.thumbnail_filename}}
+              source={{uri: "http://localhost:8080/dev/reactnative/caledoniawhisky/img/whisky/" + scotch.images.thumbnail_filename}}
               style={styles.thumbnail}
             />
             <View style={styles.rowDetails}>
@@ -183,27 +185,27 @@ class ScothListComponent extends React.Component {
                 <Image
                   style={styles.ratingStar}
                   capInsets= {{top: 1, left: 1, bottom: 1, right: 1}}
-                  source={{ uri: 'http://localhost:8080/dev/reactnative/scotchapp/img/icons/icon-star-' + (randomRating>=1 ?'gold':'grey') + '.png'}}
+                  source={{ uri: 'http://localhost:8080/dev/reactnative/caledoniawhisky/img/icons/icon-star-' + (randomRating>=1 ?'gold':'grey') + '.png'}}
                 />
                 <Image
                   style={styles.ratingStar}
                   capInsets= {{top: 1, left: 1, bottom: 1, right: 1}}
-                  source={{ uri: 'http://localhost:8080/dev/reactnative/scotchapp/img/icons/icon-star-' + (randomRating>=2 ?'gold':'grey') + '.png'}}
+                  source={{ uri: 'http://localhost:8080/dev/reactnative/caledoniawhisky/img/icons/icon-star-' + (randomRating>=2 ?'gold':'grey') + '.png'}}
                 />
                 <Image
                   style={styles.ratingStar}
                   capInsets= {{top: 1, left: 1, bottom: 1, right: 1}}
-                  source={{ uri: 'http://localhost:8080/dev/reactnative/scotchapp/img/icons/icon-star-' + (randomRating>=3 ?'gold':'grey') + '.png'}}
+                  source={{ uri: 'http://localhost:8080/dev/reactnative/caledoniawhisky/img/icons/icon-star-' + (randomRating>=3 ?'gold':'grey') + '.png'}}
                 />
                 <Image
                   style={styles.ratingStar}
                   capInsets= {{top: 1, left: 1, bottom: 1, right: 1}}
-                  source={{ uri: 'http://localhost:8080/dev/reactnative/scotchapp/img/icons/icon-star-' + (randomRating>=4 ?'gold':'grey') + '.png'}}
+                  source={{ uri: 'http://localhost:8080/dev/reactnative/caledoniawhisky/img/icons/icon-star-' + (randomRating>=4 ?'gold':'grey') + '.png'}}
                 />
                 <Image
                   style={styles.ratingStar}
                   capInsets= {{top: 1, left: 1, bottom: 1, right: 1}}
-                  source={{ uri: 'http://localhost:8080/dev/reactnative/scotchapp/img/icons/icon-star-' + (randomRating>=5 ?'gold':'grey') + '.png'}}
+                  source={{ uri: 'http://localhost:8080/dev/reactnative/caledoniawhisky/img/icons/icon-star-' + (randomRating>=5 ?'gold':'grey') + '.png'}}
                 />
               </View>
             </View>
@@ -220,7 +222,7 @@ class ScothListComponent extends React.Component {
     }
 
     var filtered = {};
-    for (var region in whiskiesByRegion) {
+    for (var region = 0; region < whiskiesByRegion.length; region++){
       filtered[region] = whiskiesByRegion[region].filter(filter);
     }
 
@@ -338,4 +340,4 @@ var styles = StyleSheet.create({
   }
 });
 
-module.exports = ScothListComponent;
+module.exports = ScotchListComponent;

@@ -7,8 +7,6 @@ var UserStore = require('../stores/UserStore');
 var React = require('react-native');
 var {
   AsyncStorage,
-  Text,
-  View
 } = React;
 
 var PREFIX = '@ReactNativeLogin:';
@@ -62,6 +60,8 @@ var store = createStore({
             store.emitChange(action);
           }
         });
+      break;
+      default:
       break;
     }
 
