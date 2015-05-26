@@ -35,21 +35,41 @@ var MenuComponent = React.createClass({
         <View style={styles.sceneContainer}>
           <NavButton
             onPress={() => {
+              this.props.navigator.replacePrevious({
+                id: 'HOME',
+                title: '',
+              })
+              this.props.navigator.pop();
             }}
             text="HOME"
           />
           <NavButton
             onPress={() => {
+              this.props.navigator.replacePrevious({
+                id: 'BROWSE',
+                title: 'BROWSE',
+              });
+              this.props.navigator.pop();
             }}
             text="BROWSE"
           />
           <NavButton
             onPress={() => {
+              this.props.navigator.replacePrevious({
+                id: 'PROFILE',
+                title: 'PROFILE',
+              });
+              this.props.navigator.pop();
             }}
             text="MY COLLECTION"
           />
           <NavButton
             onPress={() => {
+              this.props.navigator.replacePrevious({
+                id: 'SETTINGS',
+                title: 'SETTINGS',
+              })
+              this.props.navigator.pop();
             }}
             text="SETTINGS"
           />
@@ -87,13 +107,14 @@ var styles = StyleSheet.create({
     borderBottomWidth: 1 / PixelRatio.get(),
     borderBottomColor: "rgba(255,255,255,0.3)",
     alignItems: 'center',
-    textAlign: "center",
     justifyContent: 'center',
   },
   buttonText: {
-    fontSize: 14,
+    fontSize: 13,
     color:"white",
-    fontWeight: '500',
+    fontFamily: "Avenir Next",
+    letterSpacing: 1.2,
+    fontWeight: "bold",
   },
 });
 

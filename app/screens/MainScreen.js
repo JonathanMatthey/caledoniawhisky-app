@@ -15,7 +15,11 @@ var {
 
 var cssVar = require('cssVar');
 var UserActions = require('../actions/UserActions');
+var HomeComponent = require('./HomeComponent');
 var BrowseComponent = require('./BrowseComponent');
+var ProfileComponent = require('./ProfileComponent');
+var SettingsComponent = require('./SettingsComponent');
+var ScotchListComponent = require('./ScotchListComponent');
 var MenuComponent = require('./MenuComponent');
 
 class RegionButton extends React.Component {
@@ -39,6 +43,10 @@ class RegionButton extends React.Component {
 
 var NavigationBarRouteMapper = {
 
+  setTextColor: function(clr){
+    return { color: clr }
+  },
+
   LeftButton: function(route, navigator, index, navState) {
     if(route.id === "MENU"){
       return (
@@ -48,7 +56,7 @@ var NavigationBarRouteMapper = {
           }}>
           <View style={styles.navBarLeftButton}>
             <Text style={[styles.navBarText, styles.menuNavBarButtonText]}>
-              Close
+              X
             </Text>
           </View>
         </TouchableOpacity>
@@ -60,7 +68,7 @@ var NavigationBarRouteMapper = {
             navigator.push({ id: 'MENU' });
           }}>
           <View style={styles.navBarLeftButton}>
-            <Text style={[styles.navBarText, styles.navBarButtonText]}>
+            <Text style={[styles.navBarText, styles.navBarTextDefault]}>
               Menu
             </Text>
           </View>
@@ -79,7 +87,7 @@ var NavigationBarRouteMapper = {
           title: 'BROWSE',
         })}>
         <View style={styles.navBarRightButton}>
-          <Text style={[styles.navBarText, styles.navBarButtonText]}>
+          <Text style={[styles.navBarText, styles.navBarTextDefault]}>
             Share
           </Text>
         </View>
@@ -97,18 +105,12 @@ var NavigationBarRouteMapper = {
     } else {
       return (
         <Text style={[styles.navBarText, styles.navBarTitleText]}>
-          {route.id}
+          {route.title}
         </Text>
       );
     }
   }
 };
-
-function newRandomRoute() {
-  return {
-    title: '#' + Math.ceil(Math.random() * 1000),
-  };
-}
 
 var MainScreen = React.createClass({
 
@@ -116,28 +118,33 @@ var MainScreen = React.createClass({
     switch (route.id) {
       case 'MENU':
         return <MenuComponent navigator={nav} />;
+      case 'HOME':
+        return <HomeComponent navigator={nav} />;
       case 'BROWSE':
         return <BrowseComponent navigator={nav} />;
+      case 'SCOTCHLIST':
+        return <ScotchListComponent navigator={nav} />;
       case 'PROFILE':
-        return <BrowseComponent navigator={nav} />;
+        return <ProfileComponent navigator={nav} />;
+      case 'SETTINGS':
+        return <SettingsComponent navigator={nav} />;
       default:
-        return <BrowseComponent navigator={nav} />;
+        return <HomeComponent navigator={nav} />;
     }
   },
 
   render: function() {
-
     return (
       <Navigator
         debugOverlay={false}
         style={styles.appContainer}
-        initialRoute={{title: 'BROWSE'}}
+        initialRoute={{title: '', id: 'HOME'}}
         renderScene={this.renderScene}
         configureScene={(route) => {
           if (route.sceneConfig) {
             return route.sceneConfig;
           }
-          return Navigator.SceneConfigs.FloatFromBottom;
+          return Navigator.SceneConfigs.FloatFromRight;
         }}
         navigationBar={
           <Navigator.NavigationBar
@@ -159,24 +166,27 @@ var styles = StyleSheet.create({
     fontSize: 16,
     marginVertical: 10,
   },
+  navBarTextDefault:{
+    color: "#C18951",
+  },
   navBarTitleText: {
     color: cssVar('fbui-bluegray-60'),
     fontWeight: '500',
     marginVertical: 9,
   },
   menuNavBarTitleText: {
-    color: "white",
-    fontWeight: '500',
     marginVertical: 9,
+    fontSize: 22,
+    color:"white",
+    fontFamily: "Avenir Next",
+    letterSpacing: 1.2,
+    fontWeight: "bold",
   },
   navBarLeftButton: {
     paddingLeft: 10,
   },
   navBarRightButton: {
     paddingRight: 10,
-  },
-  navBarButtonText: {
-    color: cssVar('fbui-accent-blue'),
   },
   menuNavBarButtonText: {
     color: "white",

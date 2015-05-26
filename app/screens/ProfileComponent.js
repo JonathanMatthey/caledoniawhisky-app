@@ -15,7 +15,12 @@ var {
 
 var ScotchPageScreen = require('./ScotchPageScreen');
 
-var MYCOLLECTION = [
+var collection = [
+  {distiller: 'Bowmore', title: '12 year old', year: 12, region: "Islay", description: "Hogshead wench long boat no prey, no pay pressgang trysail piracy capstan heave to barkadeer pillage rigged.", images: {thumbnail: 'https://img.thewhiskyexchange.com/270/bowob.12yov10.jpg'}},
+  {distiller: 'Bowmore', title: '15 year old lamrig', year: 18, region: "Islay", description: "Hogshead wench long boat no prey, no pay pressgang trysail piracy capstan heave to barkadeer pillage rigged.", images: {thumbnail: 'https://img.thewhiskyexchange.com/270/mini_sm_bow7.jpg'}},
+  {distiller: 'Bowmore', title: '15 year old lamrig', year: 18, region: "Islay", description: "Hogshead wench long boat no prey, no pay pressgang trysail piracy capstan heave to barkadeer pillage rigged.", images: {thumbnail: 'https://img.thewhiskyexchange.com/270/mini_sm_bow7.jpg'}},
+  {distiller: 'Bowmore', title: '12 year old', year: 12, region: "Islay", description: "Hogshead wench long boat no prey, no pay pressgang trysail piracy capstan heave to barkadeer pillage rigged.", images: {thumbnail: 'https://img.thewhiskyexchange.com/270/bowob.12yov10.jpg'}},
+  {distiller: 'Bowmore', title: '15 year old lamrig', year: 18, region: "Islay", description: "Hogshead wench long boat no prey, no pay pressgang trysail piracy capstan heave to barkadeer pillage rigged.", images: {thumbnail: 'https://img.thewhiskyexchange.com/270/mini_sm_bow7.jpg'}},
   {distiller: 'Bowmore', title: '12 year old', year: 12, region: "Islay", description: "Hogshead wench long boat no prey, no pay pressgang trysail piracy capstan heave to barkadeer pillage rigged.", images: {thumbnail: 'https://img.thewhiskyexchange.com/270/bowob.12yov10.jpg'}},
   {distiller: 'Bowmore', title: '15 year old lamrig', year: 18, region: "Islay", description: "Hogshead wench long boat no prey, no pay pressgang trysail piracy capstan heave to barkadeer pillage rigged.", images: {thumbnail: 'https://img.thewhiskyexchange.com/270/mini_sm_bow7.jpg'}},
   {distiller: 'Bowmore', title: '15 year old lamrig', year: 18, region: "Islay", description: "Hogshead wench long boat no prey, no pay pressgang trysail piracy capstan heave to barkadeer pillage rigged.", images: {thumbnail: 'https://img.thewhiskyexchange.com/270/mini_sm_bow7.jpg'}},
@@ -23,7 +28,7 @@ var MYCOLLECTION = [
   {distiller: 'Bowmore', title: '15 year old lamrig', year: 18, region: "Islay", description: "Hogshead wench long boat no prey, no pay pressgang trysail piracy capstan heave to barkadeer pillage rigged.", images: {thumbnail: 'https://img.thewhiskyexchange.com/270/mini_sm_bow7.jpg'}},
 ];
 
-var NOTES = [
+var reviews = [
   {distiller: 'Jura', title: '12 year old', year: 12, region: "Islay", description: "Hogshead wench long boat no prey, no pay pressgang trysail piracy capstan heave to barkadeer pillage rigged.", images: {thumbnail: 'https://img.thewhiskyexchange.com/270/bowob.12yov10.jpg'}},
   {distiller: 'McCunty', title: '18 year old', year: 18, region: "Islay", description: "Hogshead wench long boat no prey, no pay pressgang trysail piracy capstan heave to barkadeer pillage rigged.", images: {thumbnail: 'https://img.thewhiskyexchange.com/270/bowob.non28.jpg'}},
 ];
@@ -39,43 +44,12 @@ function makeRenderable(example: any): ReactClass<any, any, any> {
     example;
 }
 
-class ProfileComponent extends React.Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      dataSource: ds.cloneWithRowsAndSections({
-        profileHeader: [{}],
-        mycollection: MYCOLLECTION,
-        notes: NOTES,
-      }),
-    };
-  }
-
+class ProfileHeader extends React.Component {
   render() {
     return (
-      <View style={styles.listContainer}>
-        <ListView
-          style={styles.list}
-          dataSource={this.state.dataSource}
-          renderRow={this._renderRow.bind(this)}
-          renderSectionHeader={this._renderSectionHeader}
-          automaticallyAdjustContentInsets={false}
-        />
-      </View>
-    );
-  }
-
-  _renderSectionHeader(data, section) {
-    if (section === "profileHeader"){
-      return (
         <View
           style={styles.profileHeader}
         >
-          <Image
-            source={{uri: "http://saveourwoods.co.uk/wp-content/uploads/2011/01/Save-Our-Woods-4.jpg"}}
-            style={styles.bgImage}
-          />
           <View
             style={styles.details}
           >
@@ -88,8 +62,7 @@ class ProfileComponent extends React.Component {
             >
               <Text
                 style={styles.fullname}
-              >
-              </Text>
+              >Colin Farrell</Text>
               <Text
                 style={styles.location}
               >
@@ -97,47 +70,114 @@ class ProfileComponent extends React.Component {
               </Text>
             </View>
           </View>
+          <View style={styles.filterRow}>
+            <TouchableHighlight
+              style={[styles.filterButton,styles.leftFilterButton]}
+              onPress={() => that.setState({showSection: 'collection'}) }
+              underlayColor="#B5B5B5"
+              >
+              <Text style={[styles.filterButtonText,styles.leftFilterButtonText]}>COLLECTION</Text>
+            </TouchableHighlight>
+            <TouchableHighlight
+              style={styles.filterButton}
+              onPress={() => that.setState({showSection: 'reviews'}) }
+              underlayColor="#B5B5B5"
+              >
+              <Text style={styles.filterButtonText}>REVIEWS</Text>
+            </TouchableHighlight>
+          </View>
+        </View>
+    );
+  }
+}
+
+
+var that = {};
+
+class ProfileComponent extends React.Component {
+
+  constructor(props) {
+    that = this;
+    super(props);
+    this.state = {
+      collectionDataSource: ds.cloneWithRowsAndSections({
+        collection: collection
+      }),
+      reviewsDataSource: ds.cloneWithRowsAndSections({
+        reviews: reviews
+      }),
+      showSection: 'collection'
+    };
+  }
+
+  render() {
+    if(this.state.showSection === "reviews"){
+      return (
+        <View style={styles.listContainer}>
+          <ProfileHeader />
+          <ListView
+            style={styles.list}
+            dataSource={this.state.reviewsDataSource}
+            renderRow={this._renderRow.bind(this)}
+            renderSectionHeader={this._renderSectionHeader}
+            automaticallyAdjustContentInsets={false}
+          />
         </View>
       );
     }
     return (
-      <View style={styles.sectionHeader}>
-        <Text style={styles.sectionHeaderTitle}>
-          {section}
-        </Text>
+      <View style={styles.listContainer}>
+        <ProfileHeader />
+        <ListView
+          style={styles.list}
+          dataSource={this.state.collectionDataSource}
+          renderRow={this._renderRow.bind(this)}
+          renderSectionHeader={this._renderSectionHeader}
+          automaticallyAdjustContentInsets={false}
+        />
+      </View>
+    );
+  }
+
+  _renderSectionHeader(data, section) {
+    return (
+      <View>
       </View>
     );
   }
 
   _renderRow(scotch, i) {
-
     if(Object.keys(scotch).length === 0){
       return (
-          <View style={{backgroundColor:"white"}}>
-          </View>
-        )
+        <View style={{backgroundColor:"white"}}>
+        </View>
+      )
     }
-
-    return (
-      <View key={i}>
-        <TouchableHighlight onPress={() => this._onPressRow(scotch)}>
-          <View style={styles.row}>
-            <Image
-              source={{uri: scotch.images.thumbnail}}
-              style={styles.thumbnail}
-            />
-            <View style={styles.rowDetails}>
-              <Text style={styles.rowTitleText}>
-                {scotch.distiller}
-              </Text>
-              <Text style={styles.rowDetailText}>
-                {scotch.title}
-              </Text>
+    if(this.state.showSection === i)
+      return (
+        <View key={i}>
+          <TouchableHighlight onPress={() => this._onPressRow(scotch)}>
+            <View style={styles.row}>
+              <View style={[styles.rowDetails, {flex:4}]}>
+                <Text style={styles.rowTitleText}>
+                  {scotch.distiller + " " + scotch.title}
+                </Text>
+                <Text style={styles.rowDetailText}>
+                  Notes Go Here
+                </Text>
+              </View>
+              <View style={[styles.rowDetails, {flex:1}]}>
+                <Text style={styles.score}>
+                  9.2
+                </Text>
+              </View>
             </View>
-          </View>
-        </TouchableHighlight>
-      </View>
-    );
+          </TouchableHighlight>
+        </View>
+      );
+    return(
+      <View></View>
+    )
   }
 
   _onPressRow(scotch) {
@@ -181,7 +221,7 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: 'white',
     paddingHorizontal: 15,
-    paddingVertical: 8,
+    paddingVertical: 15,
     alignItems: 'center',
     borderBottomWidth: 1,
     borderBottomColor: "#f4f4f4",
@@ -225,49 +265,67 @@ var styles = StyleSheet.create({
     margin:5
   },
   profileHeader:{
-    height:180,
     backgroundColor:"white",
   },
-  bgImage:{
-    position:"absolute",
-    top:0,
-    left:0,
-    right:0,
-    bottom:10,
-  },
   details:{
-    position:"absolute",
-    left:0,
-    right:0,
-    bottom:0,
     backgroundColor:"transparent",
-    flexDirection: 'row',
+    flexDirection: 'column',
   },
   detailsText:{
     flexDirection: 'column',
     justifyContent: 'center',
-    alignSelf: 'center',
   },
   avatar:{
     borderRadius:40,
     height:80,
     width:80,
-    marginLeft:25,
-    marginRight:10,
     borderWidth:2,
     borderColor: "#ffffff",
+    alignSelf: 'center',
   },
   fullname:{
-    color: "#ffffff",
+    color: "#333",
     fontSize:21,
     fontWeight: "bold",
+    textAlign:'center',
   },
   location:{
     color: "rgba(255,255,255,0.7)",
     fontSize:13,
     lineHeight:13,
-    paddingBottom:3
+    paddingBottom:3,
+    textAlign:'center',
   },
+  filterRow:{
+    flexDirection: 'row',
+    marginBottom:15,
+  },
+  filterButton: {
+    backgroundColor: 'white',
+    paddingLeft: 30,
+    paddingRight: 30,
+    paddingTop: 10,
+    paddingBottom: 10,
+    borderBottomColor: '#CDCDCD',
+    flex:1,
+  },
+  filterButtonText: {
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  leftFilterButton: {
+    borderRightColor: '#ccc',
+    borderRightWidth: 1 / PixelRatio.get(),
+  },
+  leftFilterButtonText: {
+    textAlign:'right'
+  },
+  score: {
+    color:"#C18951",
+    textAlign:"right",
+    fontWeight: "bold",
+    marginRight: 15,
+  }
 
 
 });

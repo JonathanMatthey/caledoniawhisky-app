@@ -15,7 +15,8 @@ var {
 
 var ScotchPageScreen = require('./ScotchPageScreen');
 
-var API_URL = 'http://localhost:3000/api/whiskies';
+var BASE_URL = 'http://localhost:3000/';
+var API_URL = BASE_URL + 'api/whiskies';
 var PAGE_SIZE = 25;
 var PARAMS = '?page_limit=' + PAGE_SIZE;
 var REQUEST_URL = API_URL + PARAMS;
