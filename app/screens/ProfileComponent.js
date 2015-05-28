@@ -13,7 +13,8 @@ var {
   View,
 } = React;
 
-var ScotchPageScreen = require('./ScotchPageScreen');
+// TODO - maybe go back to mainscreen router ? instead of this guy ?
+var ScotchPageComponent = require('./ScotchPageComponent');
 
 var collection = [
   {distiller: 'Bowmore', title: '12 year old', year: 12, region: "Islay", description: "Hogshead wench long boat no prey, no pay pressgang trysail piracy capstan heave to barkadeer pillage rigged.", images: {thumbnail: 'https://img.thewhiskyexchange.com/270/bowob.12yov10.jpg'}},
@@ -183,7 +184,7 @@ class ProfileComponent extends React.Component {
   _onPressRow(scotch) {
     this.props.navigator.push({
       title: scotch.distiller,
-      component: ScotchPageScreen,
+      component: ScotchPageComponent,
       passProps: {
         scotch: scotch
       },

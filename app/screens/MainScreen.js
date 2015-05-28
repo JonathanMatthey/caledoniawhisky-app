@@ -20,6 +20,7 @@ var BrowseComponent = require('./BrowseComponent');
 var ProfileComponent = require('./ProfileComponent');
 var SettingsComponent = require('./SettingsComponent');
 var ScotchListComponent = require('./ScotchListComponent');
+var ScotchPageComponent = require('./ScotchPageComponent');
 var MenuComponent = require('./MenuComponent');
 
 class RegionButton extends React.Component {
@@ -57,6 +58,19 @@ var NavigationBarRouteMapper = {
           <View style={styles.navBarLeftButton}>
             <Text style={[styles.navBarText, styles.menuNavBarButtonText]}>
               X
+            </Text>
+          </View>
+        </TouchableOpacity>
+      );
+    } else if(route.id === "SCOTCHLIST" || route.id === "SCOTCH" ){
+      return (
+        <TouchableOpacity
+          onPress={() => {
+            navigator.pop();
+          }}>
+          <View style={styles.navBarLeftButton}>
+            <Text style={[styles.navBarText, styles.navBarTextDefault]}>
+              BACK
             </Text>
           </View>
         </TouchableOpacity>
@@ -126,6 +140,8 @@ var MainScreen = React.createClass({
         return <ScotchListComponent navigator={nav} />;
       case 'PROFILE':
         return <ProfileComponent navigator={nav} />;
+      case 'SCOTCH':
+        return <ScotchPageComponent navigator={nav} scotch={route.scotch} scotchId={route.scotchId}/>;
       case 'SETTINGS':
         return <SettingsComponent navigator={nav} />;
       default:
@@ -134,6 +150,7 @@ var MainScreen = React.createClass({
   },
 
   render: function() {
+    // signout();
     return (
       <Navigator
         debugOverlay={false}
@@ -155,7 +172,6 @@ var MainScreen = React.createClass({
       />
     );
   },
-
 });
 
 var styles = StyleSheet.create({

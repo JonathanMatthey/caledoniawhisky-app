@@ -58,9 +58,15 @@ var BrowseComponent = React.createClass({
         </View>
         <RegionButton
           text="HIGHLANDS"
+          onPress={() => {
+            this.props.navigator.push({ id: 'SCOTCHLIST', title: 'HIGHLANDS' });
+          }}
         />
         <RegionButton
           text="SPEYSIDE"
+          onPress={() => {
+            this.props.navigator.push({ id: 'SCOTCHLIST', title: 'SPEYSIDE' });
+          }}
         />
         <RegionButton
           text="ISLANDS"

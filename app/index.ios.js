@@ -14,18 +14,24 @@ var LoginScreen = require('./screens/LoginScreen');
 
 var caledoniawhisky = React.createClass({
   getInitialState() {
-    return {bootstrapped: false}
+    return {
+      bootstrapped: false
+    }
   },
 
   componentWillMount() {
-    LocalStorage.bootstrap(() => this.setState({bootstrapped: true}));
+    LocalStorage.bootstrap(() => this.setState({
+      bootstrapped: true
+    }));
   },
 
   renderScene(route, nav) {
+    console.log('renderScene');
+    console.log(route);
     switch (route.id) {
       case 'authenticate':
         return <LoginScreen navigator={nav} />;
-      case 'user-info':
+      case 'home':
         return <MainScreen navigator={nav} />;
       default:
         return <View />;
@@ -45,7 +51,6 @@ var caledoniawhisky = React.createClass({
           if (route.sceneConfig) {
             return route.sceneConfig;
           }
-
           return Navigator.SceneConfigs.FloatFromRight;
         }} />
     );

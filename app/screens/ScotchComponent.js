@@ -13,16 +13,9 @@ var {
 var styles = require('./Styles');
 var UserActions = require('../actions/UserActions');
 
-var collectors = [
+var reviews = [
   {name: 'Colin Farrell',avatarUrl:"http://instinctmagazine.com/sites/instinctmagazine.com/files/images/blog_posts/Nigel%20Campbell/2014/11/16/colin%20farrell.jpeg"},
   {name: 'Liam Neeson',avatarUrl:"http://instinctmagazine.com/sites/instinctmagazine.com/files/images/blog_posts/Nigel%20Campbell/2014/11/16/colin%20farrell.jpeg"},
-];
-
-var events = [
-  {title: 'Jura Complimentary Tasting', location: '321 Hewes St', time: "Friday 19th August 8pm"},
-  {title: 'Balvenie Complimentary Tasting', location: '321 Hewes St', time: "Tuesday 19th May 7pm"},
-  {title: 'Jura Complimentary Tasting', location: '321 Hewes St', time: "Friday 19th August 8pm"},
-  {title: 'Balvenie Complimentary Tasting', location: '321 Hewes St', time: "Tuesday 19th May 7pm"},
 ];
 
 var ds = new ListView.DataSource({
@@ -31,43 +24,44 @@ var ds = new ListView.DataSource({
 });
 
 var BASE_URL = 'http://localhost:3000/';
-var API_URL = BASE_URL + 'api/home';
+var API_URL = BASE_URL + 'api/whiskies/';
 var PARAMS = '';
 var REQUEST_URL = API_URL + PARAMS;
 
-var homeData = {};
+var whiskyData = {};
 
-class HomeComponent extends React.Component {
+var WhiskyStore = require('../stores/WhiskyStore');
+
+class ScotchComponent extends React.Component {
 
   _fetchData(){
-    fetch(REQUEST_URL)
+    fetch(API_URL + this.scotchId)
       .then((response) => response.json())
       .catch((error) => {
+        console.log('error',error)
         this.setState({
           dataSource: ds.cloneWithRowsAndSections({}),
           isLoading: false,
         });
       })
       .then((responseData) => {
-        homeData = responseData;
-        this.setState({
-          dataSource: ds.cloneWithRowsAndSections(homeData),
-          isLoading: false,
-        });
+        console.log('responseData11',responseData)
+        // whiskyData = responseData;
+        // this.setState({
+        //   dataSource: ds.cloneWithRowsAndSections(whiskyData),
+        //   isLoading: false,
+        // });
       })
       .done();
   }
 
   constructor(props) {
     super(props);
-    this._fetchData();
+    // this._fetchData();
+    WhiskyStore
     this.state = {
-      dataSource: ds.cloneWithRowsAndSections(homeData),
+      dataSource: ds.cloneWithRowsAndSections(whiskyData),
     };
-  }
-
-  signout(event){
-    UserActions.deleteUserSession();
   }
 
   render() {
@@ -97,12 +91,12 @@ class HomeComponent extends React.Component {
           <Image
             style={styles.heroScotch}
             resizeMode={Image.resizeMode.contain}
-            source={{uri : BASE_URL + "/img/whisky_resized/thumbs/" + data.images.thumbnail_filename}}
+            source={{uri : BASE_URL + "/img/whisky/" + data.images.thumbnail_filename}}
           >
           </Image>
           <View style={styles.heroDetails}>
             <Text style={styles.heroRegion}>JUST IN</Text>
-            <Text style={styles.heroTitle}>{data.title}</Text>
+            <Text style={styles.heroTitle}>Aberfeldy 12y</Text>
           </View>
         </View>
       );
@@ -113,10 +107,6 @@ class HomeComponent extends React.Component {
         <Text style={styles.sectionHeaderText}>{sectionTitle}</Text>
       </View>
     );
-  }
-
-  _onPressCollectorRow(){
-
   }
 
   _renderRow(rowObj, i) {
@@ -294,4 +284,4 @@ var styles = StyleSheet.create({
   }
 });
 
-module.exports = HomeComponent;
+module.exports = ScotchComponent;

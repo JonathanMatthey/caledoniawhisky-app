@@ -13,17 +13,17 @@ var {
   TouchableHighlight,
 } = React;
 
-var ScotchPageScreen = React.createClass({
-  render: function() {
+class SettingsComponent extends React.createClass{
+  render(){
     return (
       <View>
         <Text style={{paddingTop:100}}>SETTINGS</Text>
       </View>
     );
-  },
-});
+  }
+};
 
 var styles = StyleSheet.create({
 });
 
-module.exports = ScotchPageScreen;
+module.exports = SettingsComponent;
