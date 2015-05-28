@@ -47,6 +47,10 @@ function makeRenderable(example: any): ReactClass<any, any, any> {
 
 class ProfileHeader extends React.Component {
   render() {
+    var btnCollectionColor = "#C18951", btnReviewsColor = "#aaa";
+    if(that.state.showSection === "reviews"){
+      btnCollectionColor = "#aaa", btnReviewsColor = "#C18951";
+    }
     return (
         <View
           style={styles.profileHeader}
@@ -75,16 +79,16 @@ class ProfileHeader extends React.Component {
             <TouchableHighlight
               style={[styles.filterButton,styles.leftFilterButton]}
               onPress={() => that.setState({showSection: 'collection'}) }
-              underlayColor="#B5B5B5"
+              underlayColor="#fff"
               >
-              <Text style={[styles.filterButtonText,styles.leftFilterButtonText]}>COLLECTION</Text>
+              <Text style={[styles.filterButtonText,styles.leftFilterButtonText,{color:btnCollectionColor}]}>COLLECTION</Text>
             </TouchableHighlight>
             <TouchableHighlight
               style={styles.filterButton}
               onPress={() => that.setState({showSection: 'reviews'}) }
-              underlayColor="#B5B5B5"
+              underlayColor="#fff"
               >
-              <Text style={styles.filterButtonText}>REVIEWS</Text>
+              <Text style={[styles.filterButtonText,{color:btnReviewsColor}]}>REVIEWS</Text>
             </TouchableHighlight>
           </View>
         </View>
@@ -161,7 +165,7 @@ class ProfileComponent extends React.Component {
             <View style={styles.row}>
               <View style={[styles.rowDetails, {flex:4}]}>
                 <Text style={styles.rowTitleText}>
-                  {scotch.distiller + " " + scotch.title}
+                  {scotch.distiller.toUpperCase() + " " + scotch.title.toUpperCase()}
                 </Text>
                 <Text style={styles.rowDetailText}>
                   Notes Go Here
@@ -237,12 +241,15 @@ var styles = StyleSheet.create({
     marginLeft: 15,
   },
   rowTitleText: {
-    fontSize: 17,
-    fontWeight: '500',
+    fontSize: 15,
+    fontWeight: '600',
+    fontFamily: "Avenir Next",
+    paddingBottom: 3,
   },
   rowDetailText: {
-    fontSize: 15,
-    color: '#888888',
+    fontSize: 16,
+    fontFamily: "Bodoni 72",
+    color: '#333',
     lineHeight: 20,
   },
   searchRow: {
